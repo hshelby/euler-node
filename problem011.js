@@ -1,4 +1,4 @@
-var grid = [
+grid = [
 08,02,22,97,38,15,00,40,00,75,04,05,07,78,52,12,50,77,91,08
 ,49,49,99,40,17,81,18,57,60,87,17,40,98,43,69,48,04,56,62,00
 ,81,49,31,73,55,79,14,29,93,71,40,67,53,88,30,03,49,13,36,65
@@ -23,11 +23,11 @@ var grid = [
 
 var un = require('underscore');
 
-function isValidRowIndex(index, rowLength, count){
+isValidRowIndex = function(index, rowLength, count){
 	return (index % rowLength) <= (rowLength - count);
 }
 
-function isValidColumnIndex(index, rowLength, count){
+isValidColumnIndex = function(index, rowLength, count){
 	return Math.floor(index / rowLength) <= (rowLength - count);
 }
 
@@ -57,38 +57,31 @@ function slash(array, index, rowLength, count){
 
 function backslash(array, index, rowLength, count){
 	return isValidRowIndex(index, rowLength, count) && isValidColumnIndex(index, rowLength, count) ?
-		-1:
+		un.reduce(un.range(index, index + (3 * rowLength) + 4, rowLength + 1), function(memo, num){
+			return memo * array[num];
+		},1) :
 		0;
 }
 
-exports.testHorizontal = function(test){
-	test.expect(1);
-	var actual = horizontal(grid, 128, 20, 4);
-	var expected = 2647840;
-	test.equal(actual, expected);
-	test.done();
+function gridMax(array, index, rowLength, count){
+	return un.max([
+		horizontal(array, index, rowLength, count),
+		   vertical(array, index, rowLength, count),
+		   slash(array, index, rowLength, count),
+		   backslash(array, index, rowLength, count)
+	]);
 }
 
-exports.testVertical = function(test){
-	test.expect(1);
-	var actual = vertical(grid, 128, 20, 4);
-	var expected = 4791800;
-	test.equal(actual, expected);
-	test.done();
+exports.horizontal = horizontal;
+exports.vertical = vertical;
+exports.slash = slash;
+exports.backslash = backslash;
+exports.gridMax = gridMax;
+
+exports.getSolution = function(){
+	return un.reduce(grid, function(memo, value, index, list){
+		var temp = gridMax(list, index, 20, 4);
+		return temp > memo ? temp : memo;
+	}, 0);
 }
 
-exports.testSlash = function(test){
-	test.expect(1);
-	var actual = slash(grid, 128, 20, 4);
-	var expected = 2141320;
-	test.equal(actual, expected);
-	test.done();
-}
-
-exports.testBackslash = function(test){
-	test.expect(1);
-	var actual = backslash(grid, 128, 20, 4);
-	var expected = 1788696;
-	test.equal(actual, expected);
-	test.done();
-}

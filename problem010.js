@@ -20,10 +20,11 @@ function buildSieve(max){
 	}
 	return sieve;
 }
-var target = 2000000;
-var sieve = buildSieve(target);
-var sum = _und.reduce(sieve, function(memo, value, index){
-	return index > 1 ? memo + value : memo;
-}, 0);
 
-console.log(sum.toString());
+exports.getSolution = function(){
+	var target = 2000000;
+	var sieve = buildSieve(target);
+	return _und.reduce(sieve, function(memo, value, index){
+		return index > 1 ? memo + value : memo;
+	}, 0);
+}

@@ -71,28 +71,10 @@ function lettersInRange(max){
 	return un.reduce(range, function(memo, num){ return memo + numberNameLength(num); }, 0);
 }
 
-process.stdout.write(lettersInRange(1000).toString());
+exports.numberToName = numberToName;
+exports.numberNameLength = numberNameLength;
+exports.lettersInRange = lettersInRange;
 
-exports.testNumberToName = function(test){
-	test.expect(2);
-	var threeFortyTwo = numberToName(342);
-	test.equal(threeFortyTwo, "three hundred and forty-two");
-	var oneFifteen = numberToName(115);
-	test.equal(oneFifteen, "one hundred and fifteen");
-	test.done();
-}
-
-exports.testNumberNameLength = function(test){
-	test.expect(3);
-	test.equal(numberNameLength(342), 23);
-	test.equal(numberNameLength(115), 20);
-	test.equal(numberNameLength(1000), 11, numberToName(1000));
-	test.done();
-}
-
-exports.testSampleOutput = function(test){
-	test.expect(1);
-	var letterCount = lettersInRange(5);
-	test.equal(letterCount, 19);
-	test.done();
+exports.getSolution = function(){
+	return lettersInRange(1000);
 }
